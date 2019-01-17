@@ -11,7 +11,7 @@
     <title>Sample JSP Page</title>
   </head>
   <body>
-  <h1>My first page</h1>
+  <h1>Adam Smith's first Project page</h1>
   <p>This is a paragraph.</p>
   </body>
 </html>

@@ -5,11 +5,11 @@ public class Person {
     private int id;
     private String first;
     private String last;
-    private int phone;
+    private String phone;
     private String email;
     private String birthday;
 
-    
+
 
     public String getBirthday() { return birthday;    }
 
@@ -20,12 +20,10 @@ public class Person {
         return id;
     }
 
-    public int getPhone()
+    public String getPhone()
     {
         return phone;
     }
-
-    public void setId(int id) { this.id = id; }
 
     public String getFirst()
     {
@@ -37,6 +35,8 @@ public class Person {
         return last;
     }
 
+    public void setId(int id) { this.id = id; }
+
     public void setFirst(String first)
     {
         this.first = first;
@@ -46,5 +46,17 @@ public class Person {
     {
         this.last = last;
     }
+
+    public void setPhone(String number){
+        this.phone = number;
+    }
+    public void setBirthday(String birthday){
+        this.birthday = birthday;
+    }
+    public void setEmail(String email){
+        this.email = email;
+    }
+
+
 
 }

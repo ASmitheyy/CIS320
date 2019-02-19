@@ -5,7 +5,7 @@ function updateTable() {
     var url = "api/name_list_get";
 
     $('#datatable tr:last').after('<tr><td>ID</td><td>First</td><td>Last</td><td>Phone</td>'+
-    '<td>Email</td><td>Birthday</td></tr>');
+        '<td>Email</td><td>Birthday</td></tr>');
 
     $.getJSON(url, null, function(json_result) {
 
@@ -15,9 +15,9 @@ function updateTable() {
                     num.substring(6,10);
 
                 $('#datatable tr:last').after('<tr><td>'+json_result[i].id + '</td>'+
-                '<td>'+json_result[i].first +'</td><td>'+json_result[i].last +'</td>'+
-                '<td>'+ phoneNum +'</td><td>'+json_result[i].email +'</td>'+
-                '<td>'+json_result[i].birthday +'</td></tr>');
+                    '<td>'+json_result[i].first +'</td><td>'+json_result[i].last +'</td>'+
+                    '<td>'+ phoneNum +'</td><td>'+json_result[i].email +'</td>'+
+                    '<td>'+json_result[i].birthday +'</td></tr>');
             }
             console.log("Done");
         }
@@ -68,63 +68,87 @@ saveChangesBtn.on('click', saveChanges);
 
 function saveChanges(){
     var nameRegEx = new RegExp(/^((?![0-9\~\!\@\#\$\%\^\&\*\(\)\_\+\=\-\[\]\{\}\;\:\"\\\/\<\>\?]).)+$/);
-                //This REGEX was taken from https://stackoverflow.com/questions/6381752/validating-users-utf-8-name-in-javascript
-                //If you negate all the illegal characters then it should catch all the legal ones
+    //This REGEX was taken from https://stackoverflow.com/questions/6381752/validating-users-utf-8-name-in-javascript
+    //If you negate all the illegal characters then it should catch all the legal ones
     var emailRegEx = new RegExp(/\S+@\S+\.\S+/);
-   //taken from stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
+    //taken from stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
 
     var phoneRegEx = new RegExp(/[0-9][0-9][0-9][/-][0-9][0-9][0-9][-/][0-9][0-9][0-9][0-9]/);
-    var birthdayRegEx = new RegExp(/[1-9][1-9][1-9][1-9]-[0-9][0-2]-[1-3][0-9]/);
+    var birthdayRegEx = new RegExp(/[1-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]/);
 
 
-    var txt1 = $('#firstName').val();
+    var firstNameField = $('#firstName').val();
     var txt2 = $('#lastName').val();
     var txt3 = $('#email').val();
     var txt4 = $('#phone').val();
     var txt5 = $('#birthday').val();
 
+    var person = {};
 
-    if (nameRegEx.test(txt1)){
+    if (nameRegEx.test(firstNameField)){
         $('#firstName').removeClass("is-invalid");
         $('#firstName').addClass("is-valid");
+        test1 = true;
 
+        person.firstName = firstNameField;
 
     }else{
         $('#firstName').addClass("is-invalid");
         $('#firstName').removeClass("is-valid");
+        test1 = false;
 
     }
     if (nameRegEx.test(txt2)) {
         $('#lastName').removeClass("is-invalid");
         $('#lastName').addClass("is-valid");
-
+        test2 = true;
+        person.lastName = txt2;
     }else {
         $('#lastName').removeClass("is-valid");
         $('#lastName').addClass("is-invalid");
+        test2 = false;
     }
 
     if(emailRegEx.test(txt3)){
         $('#email').removeClass("is-invalid");
         $('#email').addClass("is-valid");
+        test3 = true;
+        person.email = txt3;
     }else{
         $('#email').removeClass("is-valid");
         $('#email').addClass("is-invalid");
+        test3 = false;
     }
     if(phoneRegEx.test(txt4)){
         $('#phone').removeClass("is-invalid");
         $('#phone').addClass("is-valid");
+        test4 = true;
+        person.phone = txt4;
     }else{
         $('#phone').removeClass("is-valid");
         $('#phone').addClass("is-invalid");
+        test4 = false;
     }
     if(birthdayRegEx.test(txt5)){
         $('#birthday').removeClass("is-invalid");
         $('#birthday').addClass("is-valid");
+        test5 = true;
+        person.birthday = txt5;
     }else{
         $('#birthday').removeClass("is-valid");
         $('#birthday').addClass("is-invalid");
+        test5 = false;
     }
 
-    console.log("Hey, Save changes clicked");
-}
+    if(test1 && test2 && test3 && test4 && test5){
+        var jsonString = JSON.stringify(person);
 
+        var url = "api/name_list_edit";
+
+        $.post(url, jsonString, function (jsonString) {
+            console.log("Finished calling servlet.");
+            console.log(jsonString);;
+        });
+    }
+
+}

@@ -3,8 +3,8 @@ package edu.simpson.asmith;
 public class Person {
 
     private int id;
-    private String first;
-    private String last;
+    private String firstName;
+    private String lastName;
     private String phone;
     private String email;
     private String birthday;
@@ -25,26 +25,26 @@ public class Person {
         return phone;
     }
 
-    public String getFirst()
+    public String getFirstName()
     {
-        return first;
+        return firstName;
     }
 
-    public String getLast()
+    public String getLastName()
     {
-        return last;
+        return lastName;
     }
 
     public void setId(int id) { this.id = id; }
 
-    public void setFirst(String first)
+    public void setFirstName(String firstName)
     {
-        this.first = first;
+        this.firstName = firstName;
     }
 
-    public void setLast(String last)
+    public void setLastName(String lastName)
     {
-        this.last = last;
+        this.lastName = lastName;
     }
 
     public void setPhone(String number){

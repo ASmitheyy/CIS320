@@ -3,7 +3,6 @@ package edu.simpson.asmith;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.List;
@@ -60,8 +59,8 @@ public class PersonDAO {
 
                 // Get the data from the result set, and copy it to the Person object
                 person.setId(rs.getInt("id"));
-                person.setFirst(rs.getString("first"));
-                person.setLast(rs.getString("last"));
+                person.setFirstName(rs.getString("first"));
+                person.setLastName(rs.getString("last"));
                 person.setBirthday(rs.getString("birthday"));
                 person.setEmail(rs.getString("email"));
                 person.setPhone(rs.getString("phone"));

@@ -46,6 +46,19 @@ function showDialogAdd(){
     $('#phone').val("");
     $('#birthday').val("");
 
+    // this loops through each tag and clears the green/red outline
+    var txt1 = $('#firstName');
+    var txt2 = $('#lastName');
+    var txt3 = $('#email');
+    var txt4 = $('#phone');
+    var txt5 = $('#birthday');
+
+    var myArray = [txt1, txt2,txt3,txt4,txt5];
+    myArray.forEach(function(element){
+        element.removeClass("is-invalid");
+        element.removeClass("is-valid");
+    });
+
     // Show the hidden dialog
     $('#myModal').modal('show');
 
@@ -54,27 +67,64 @@ var saveChangesBtn = $('#saveChanges');
 saveChangesBtn.on('click', saveChanges);
 
 function saveChanges(){
-    var nameRegEx = new RegExp(/^([a-zA-Z]{2,}\s[a-zA-z]{1,}'?-?[a-zA-Z]{2,}\s?([a-zA-Z]{1,})?)/);
-        //This REGEX was taken from https://stackoverflow.com/questions/2385701/regular-expression-for-first-and-last-name
+    var nameRegEx = new RegExp(/^((?![0-9\~\!\@\#\$\%\^\&\*\(\)\_\+\=\-\[\]\{\}\;\:\"\\\/\<\>\?]).)+$/);
+                //This REGEX was taken from https://stackoverflow.com/questions/6381752/validating-users-utf-8-name-in-javascript
+                //If you negate all the illegal characters then it should catch all the legal ones
+    var emailRegEx = new RegExp(/\S+@\S+\.\S+/);
+   //taken from stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
+
+    var phoneRegEx = new RegExp(/[0-9][0-9][0-9][/-][0-9][0-9][0-9][-/][0-9][0-9][0-9][0-9]/);
+    var birthdayRegEx = new RegExp(/[1-9][1-9][1-9][1-9]-[0-9][0-2]-[1-3][0-9]/);
 
 
-
-    var txt1 = $('#id').val();
-    var txt2 = $('#firstName').val();
-    var txt3 = $('#lastName').val();
-    var txt4 = $('#email').val();
-    var txt5 = $('#phone').val();
-    var txt6 = $('#birthday').val();
+    var txt1 = $('#firstName').val();
+    var txt2 = $('#lastName').val();
+    var txt3 = $('#email').val();
+    var txt4 = $('#phone').val();
+    var txt5 = $('#birthday').val();
 
 
-    if (nameRegEx.test(txt1,txt2)){
-        $('#firstName').addClass("is-valid");
-        $('#lastName').addClass("is-valid");
-    }else{
+    if (nameRegEx.test(txt1)){
         $('#firstName').removeClass("is-invalid");
+        $('#firstName').addClass("is-valid");
+
+
+    }else{
+        $('#firstName').addClass("is-invalid");
+        $('#firstName').removeClass("is-valid");
+
+    }
+    if (nameRegEx.test(txt2)) {
         $('#lastName').removeClass("is-invalid");
+        $('#lastName').addClass("is-valid");
+
+    }else {
+        $('#lastName').removeClass("is-valid");
+        $('#lastName').addClass("is-invalid");
     }
 
+    if(emailRegEx.test(txt3)){
+        $('#email').removeClass("is-invalid");
+        $('#email').addClass("is-valid");
+    }else{
+        $('#email').removeClass("is-valid");
+        $('#email').addClass("is-invalid");
+    }
+    if(phoneRegEx.test(txt4)){
+        $('#phone').removeClass("is-invalid");
+        $('#phone').addClass("is-valid");
+    }else{
+        $('#phone').removeClass("is-valid");
+        $('#phone').addClass("is-invalid");
+    }
+    if(birthdayRegEx.test(txt5)){
+        $('#birthday').removeClass("is-invalid");
+        $('#birthday').addClass("is-valid");
+    }else{
+        $('#birthday').removeClass("is-valid");
+        $('#birthday').addClass("is-invalid");
+    }
 
     console.log("Hey, Save changes clicked");
 }
+

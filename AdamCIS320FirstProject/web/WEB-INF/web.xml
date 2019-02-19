@@ -13,5 +13,45 @@
         <servlet-name>NameListGet</servlet-name>
         <url-pattern>/api/name_list_get</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>FormTestServlet</servlet-name>
+        <servlet-class>edu.simpson.asmith.FormTestServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>FormTestServlet</servlet-name>
+        <url-pattern>/api/form_test_servlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>FormTestJSONServlet</servlet-name>
+        <servlet-class>edu.simpson.asmith.FormTestJSONServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FormTestCheckboxServlet</servlet-name>
+        <servlet-class>edu.simpson.asmith.FormTestCheckboxServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FormTestCheckboxServlet</servlet-name>
+        <url-pattern>/api/form_test_checkbox_servlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FormTestJSONServlet</servlet-name>
+        <url-pattern>/api/form_test_json_servlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>FormTestFileServlet</servlet-name>
+        <servlet-class>edu.simpson.asmith.FormTestFileServlet</servlet-class>
+        <multipart-config>
+            <max-file-size>50000</max-file-size>
+            <max-request-size>50000</max-request-size>
+            <file-size-threshold>0</file-size-threshold>
+        </multipart-config>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FormTestFileServlet</servlet-name>
+        <url-pattern>/api/form_test_file_servlet</url-pattern>
+    </servlet-mapping>
 
 </web-app>

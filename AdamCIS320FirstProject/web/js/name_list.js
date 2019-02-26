@@ -4,18 +4,19 @@ function updateTable() {
 
     var url = "api/name_list_get";
 
+
+
     $('#datatable tr:last').after('<tr><td>ID</td><td>First</td><td>Last</td><td>Phone</td>'+
         '<td>Email</td><td>Birthday</td></tr>');
 
     $.getJSON(url, null, function(json_result) {
-
             for (var i = 0; i < json_result.length; i++) {
                 var num = json_result[i].phone;
                 var phoneNum = num.substring(0,3) +'-' + num.substring(3,6) + '-'+
                     num.substring(6,10);
 
                 $('#datatable tr:last').after('<tr><td>'+json_result[i].id + '</td>'+
-                    '<td>'+json_result[i].first +'</td><td>'+json_result[i].last +'</td>'+
+                    '<td>'+json_result[i].firstName +'</td><td>'+json_result[i].lastName +'</td>'+
                     '<td>'+ phoneNum +'</td><td>'+json_result[i].email +'</td>'+
                     '<td>'+json_result[i].birthday +'</td></tr>');
             }
@@ -73,7 +74,7 @@ function saveChanges(){
     var emailRegEx = new RegExp(/\S+@\S+\.\S+/);
     //taken from stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
 
-    var phoneRegEx = new RegExp(/[0-9][0-9][0-9][/-][0-9][0-9][0-9][-/][0-9][0-9][0-9][0-9]/);
+    var phoneRegEx = new RegExp(/[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]/);
     var birthdayRegEx = new RegExp(/[1-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]/);
 
 
@@ -147,8 +148,11 @@ function saveChanges(){
 
         $.post(url, jsonString, function (jsonString) {
             console.log("Finished calling servlet.");
-            console.log(jsonString);;
+            console.log(jsonString);
+            $('#datatable td').remove();
+            updateTable();
         });
+
     }
 
 }

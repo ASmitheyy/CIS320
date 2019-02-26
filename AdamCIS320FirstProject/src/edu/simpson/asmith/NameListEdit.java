@@ -32,6 +32,8 @@ public class NameListEdit extends HttpServlet {
         Gson gson = new Gson();
         Person fromJson = gson.fromJson(requestString, Person.class);
 
+        PersonDAO.insertPerson(fromJson);
+
         // Make sure our field was set.
         out.println("Object test: "+fromJson.getFirstName() + ", " + fromJson.getLastName()+", " + fromJson.getEmail()
                 +", " + fromJson.getPhone()+", " + fromJson.getBirthday());

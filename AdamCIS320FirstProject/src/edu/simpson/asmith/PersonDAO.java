@@ -82,4 +82,38 @@ public class PersonDAO {
         return list;
     }
 
+    public static void insertPerson(Person personObj){
+        log.log(Level.FINE, "Inserting person");
+        Connection conn = null;
+        PreparedStatement stmt = null;
+
+        try{
+            conn = DBHelper.getConnection();
+
+            String sql = "INSERT INTO cis320.person (first, last, email, phone, birthday) VALUES (?, ?, ?, ?, ?);";
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1,personObj.getFirstName());
+            stmt.setString(2, personObj.getLastName());
+            stmt.setString(3, personObj.getBirthday());
+            stmt.setString(4, personObj.getPhone());
+            stmt.setString(5,personObj.getBirthday());
+
+            stmt.execute();
+
+            log.log(Level.FINE, "Inserted person success");
+
+
+
+        } catch (SQLException se) {
+            log.log(Level.SEVERE, "SQL Error", se );
+        } catch (Exception e) {
+            log.log(Level.SEVERE, "Error", e );
+        }
+        finally {
+            try { stmt.close(); } catch (Exception e) { log.log(Level.SEVERE, "Error", e ); }
+            try { conn.close(); } catch (Exception e) { log.log(Level.SEVERE, "Error", e ); }
+        }
+
+    }
+
 }

@@ -94,7 +94,7 @@ public class PersonDAO {
             stmt = conn.prepareStatement(sql);
             stmt.setString(1,personObj.getFirstName());
             stmt.setString(2, personObj.getLastName());
-            stmt.setString(3, personObj.getBirthday());
+            stmt.setString(3, personObj.getEmail());
             stmt.setString(4, personObj.getPhone());
             stmt.setString(5,personObj.getBirthday());
 

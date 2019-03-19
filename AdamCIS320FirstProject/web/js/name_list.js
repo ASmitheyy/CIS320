@@ -5,21 +5,27 @@ function updateTable() {
     var url = "api/name_list_get";
 
 
-
-    $('#datatable tr:last').after('<tr><td>ID</td><td>First</td><td>Last</td><td>Phone</td>'+
-        '<td>Email</td><td>Birthday</td></tr>');
+    $('#datatable tr:last').after('<tr><td>First</td><td>Last</td><td>Phone</td>'+
+        '<td>Email</td><td>Birthday</td><td></td></tr>');
 
     $.getJSON(url, null, function(json_result) {
             for (var i = 0; i < json_result.length; i++) {
+                var id = json_result[i].id;
                 var num = json_result[i].phone;
                 var phoneNum = num.substring(0,3) +'-' + num.substring(3,6) + '-'+
                     num.substring(6,10);
 
-                $('#datatable tr:last').after('<tr><td>'+json_result[i].id + '</td>'+
-                    '<td>'+json_result[i].firstName +'</td><td>'+json_result[i].lastName +'</td>'+
-                    '<td>'+ phoneNum +'</td><td>'+json_result[i].email +'</td>'+
-                    '<td>'+json_result[i].birthday +'</td></tr>');
+                $('#datatable tr:last').after(
+                    "<tr>" +
+                    "<td>" + json_result[i].firstName + "</td>" +
+                    "<td>" + json_result[i].lastName +"</td>"+
+                    "<td>" + phoneNum +'</td><td>'+json_result[i].email +"</td>"+
+                    "<td>" + json_result[i].birthday +"</td>" +
+                    "<td><button type=\'button\' name=\'delete\' class=\'deleteButton btn\' value=\'" + id +"\'>Delete</button></td>" +
+                    "</tr>");
             }
+            var deleteBtn = $(".deleteButton");
+            deleteBtn.on("click", deleteItem);
             console.log("Done");
         }
     );
@@ -151,8 +157,29 @@ function saveChanges(){
             console.log(jsonString);
             $('#datatable td').remove();
             updateTable();
+
+
+
+            $('#myModal').modal('hide');
         });
-
     }
-
 }
+
+function deleteItem(e) {
+    var person = {};
+    person.id = e.target.value;
+    var jsonString = JSON.stringify(person);
+
+    var url = "api/name_list_delete";
+
+    $.post(url, jsonString, function (jsonString) {
+        console.log("Finished calling servlet.");
+        console.log(jsonString);
+        $('#datatable td').remove();
+        updateTable();
+    });
+}
+
+
+
+

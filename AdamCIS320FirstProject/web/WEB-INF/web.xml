@@ -15,6 +15,16 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>NameListDelete</servlet-name>
+        <servlet-class>edu.simpson.asmith.NameListDelete</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>NameListDelete</servlet-name>
+        <url-pattern>/api/name_list_delete</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>NameListEdit</servlet-name>
         <servlet-class>edu.simpson.asmith.NameListEdit</servlet-class>
     </servlet>

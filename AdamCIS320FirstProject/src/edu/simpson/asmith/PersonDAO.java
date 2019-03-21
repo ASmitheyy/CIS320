@@ -148,6 +148,48 @@ public class PersonDAO {
     }
 
 
+    public static void updatePerson(Person personObj){
+        log.log(Level.FINE, "Updating person");
+        Connection conn = null;
+        PreparedStatement stmt = null;
+            try {
 
+                conn = DBHelper.getConnection();
+
+                String sql = "UPDATE cis320.person set first= ?, last = ?, email = ?, phone = ?, birthday = ? where id = ?;";
+                stmt = conn.prepareStatement(sql);
+
+                stmt.setString(1, personObj.getFirstName());
+                stmt.setString(2, personObj.getLastName());
+                stmt.setString(3, personObj.getEmail());
+                stmt.setString(4, personObj.getPhone());
+                stmt.setString(5, personObj.getBirthday());
+
+                stmt.setInt(6, personObj.getId());
+
+
+                stmt.execute();
+
+                log.log(Level.FINE, "Updated person success");
+
+
+            } catch (SQLException se) {
+                log.log(Level.SEVERE, "SQL Error", se);
+            } catch (Exception e) {
+                log.log(Level.SEVERE, "Error", e);
+            } finally {
+                try {
+                    stmt.close();
+                } catch (Exception e) {
+                    log.log(Level.SEVERE, "Error", e);
+                }
+                try {
+                    conn.close();
+                } catch (Exception e) {
+                    log.log(Level.SEVERE, "Error", e);
+                }
+            }
+
+    }
 
 }

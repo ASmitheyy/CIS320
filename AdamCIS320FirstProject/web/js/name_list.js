@@ -12,20 +12,35 @@ function updateTable() {
             for (var i = 0; i < json_result.length; i++) {
                 var id = json_result[i].id;
                 var num = json_result[i].phone;
-                var phoneNum = num.substring(0,3) +'-' + num.substring(3,6) + '-'+
-                    num.substring(6,10);
+                var phoneNum;
+
+                if(num.substring(3,4) === '-'){
+                    phoneNum = num;
+                }else{
+                    phoneNum = num.substring(0,3) +'-' + num.substring(3,6) + '-'+
+                        num.substring(6,10);
+                }
+
+
 
                 $('#datatable tr:last').after(
                     "<tr>" +
+                    "<td id = \"id\" class=\"hidden\">" + json_result[i].id + "</td>" +
                     "<td>" + json_result[i].firstName + "</td>" +
                     "<td>" + json_result[i].lastName +"</td>"+
                     "<td>" + phoneNum +'</td><td>'+json_result[i].email +"</td>"+
                     "<td>" + json_result[i].birthday +"</td>" +
                     "<td><button type=\'button\' name=\'delete\' class=\'deleteButton btn\' value=\'" + id +"\'>Delete</button></td>" +
+                    "<td><button type=\'button\' name=\'edit\' class=\'editButton btn\' value=\'" + id +"\'>Edit</button></td>" +
                     "</tr>");
             }
+
+            $('.hidden').hide();
             var deleteBtn = $(".deleteButton");
+            var editBtn = $(".editButton");
             deleteBtn.on("click", deleteItem);
+            editBtn.on("click", editItem);
+
             console.log("Done");
         }
     );
@@ -81,6 +96,7 @@ function saveChanges(){
     //taken from stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
 
     var phoneRegEx = new RegExp(/[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]/);
+    var phoneRegEx2 = new RegExp(/[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]/)
     var birthdayRegEx = new RegExp(/[1-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]/);
 
 
@@ -89,8 +105,10 @@ function saveChanges(){
     var txt3 = $('#email').val();
     var txt4 = $('#phone').val();
     var txt5 = $('#birthday').val();
+    var id = $('#id').val();
 
     var person = {};
+
 
     if (nameRegEx.test(firstNameField)){
         $('#firstName').removeClass("is-invalid");
@@ -126,7 +144,7 @@ function saveChanges(){
         $('#email').addClass("is-invalid");
         test3 = false;
     }
-    if(phoneRegEx.test(txt4)){
+    if(phoneRegEx.test(txt4) || phoneRegEx2.test(txt4)){
         $('#phone').removeClass("is-invalid");
         $('#phone').addClass("is-valid");
         test4 = true;
@@ -147,22 +165,34 @@ function saveChanges(){
         test5 = false;
     }
 
-    if(test1 && test2 && test3 && test4 && test5){
+    if(test1 && test2 && test3 && test4 && test5) {
         var jsonString = JSON.stringify(person);
-
-        var url = "api/name_list_edit";
-
-        $.post(url, jsonString, function (jsonString) {
-            console.log("Finished calling servlet.");
-            console.log(jsonString);
-            $('#datatable td').remove();
-            updateTable();
-
-
-
-            $('#myModal').modal('hide');
-        });
     }
+
+        if(id === ""){
+            var url = "api/name_list_edit";
+
+            $.post(url, jsonString, function (jsonString) {
+                console.log("Finished calling servlet.");
+                console.log(jsonString);
+                $('#datatable td').remove();
+                updateTable();
+                $('#myModal').modal('hide');
+            });
+        }else{
+            person.id = id;
+            jsonString = JSON.stringify(person);
+            console.log(jsonString);
+            var url = "api/name_list_edit";
+
+            $.post(url, jsonString, function (jsonString) {
+                console.log("Finished calling servlet.");
+                console.log(jsonString);
+                $('#datatable td').remove();
+                updateTable();
+                $('#myModal').modal('hide');
+            });
+        }
 }
 
 function deleteItem(e) {
@@ -180,6 +210,33 @@ function deleteItem(e) {
     });
 }
 
+function editItem(e) {
+    var id = e.target.value;
 
+// This next line is fun.
+// "e" is the event of the mouse click
+// "e.target" is what the user clicked on. The button in this case.
+// "e.target.parentNode" is the node that holds the button. In this case, the table cell.
+// "e.target.parentNode.parentNode" is the parent of the table cell. In this case, the table row.
+// "e.target.parentNode.parentNode.querySelectorAll("td")" gets an array of all matching table cells in the row
+// "e.target.parentNode.parentNode.querySelectorAll("td")[0]" is the first cell. (You can grab cells 0, 1, 2, etc.)
+// "e.target.parentNode.parentNode.querySelectorAll("td")[0].innerHTML" is content of that cell. Like "Sam" for example.
+// How did I find this long chain? Just by setting a breakpoint and using the interactive shell in my browser.
+    var id = e.target.parentNode.parentNode.querySelectorAll("td")[0].innerHTML;
+    var firstName = e.target.parentNode.parentNode.querySelectorAll("td")[1].innerHTML;
+    var lastName = e.target.parentNode.parentNode.querySelectorAll("td")[2].innerHTML;
+    var phone = e.target.parentNode.parentNode.querySelectorAll("td")[3].innerHTML;
+    var email = e.target.parentNode.parentNode.querySelectorAll("td")[4].innerHTML;
+    var birthday = e.target.parentNode.parentNode.querySelectorAll("td")[5].innerHTML;
+
+    $('#id').val(id); // Yes, now we set and use the hidden ID field
+    $('#firstName').val(firstName);
+    $('#lastName').val(lastName);
+    $('#phone').val(phone);
+    $('#email').val(email);
+    $('#birthday').val(birthday);
+
+    $('#myModal').modal('show');
+}
 
 

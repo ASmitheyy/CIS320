@@ -20,7 +20,7 @@ public class NameListEdit extends HttpServlet {
     private Pattern emailFieldsPattern;
     private Pattern phoneFieldsPattern;
     private Pattern birthdayFieldsPattern;
-
+    private Pattern phoneFieldsPattern2;
 
     public NameListEdit(){
         nameFieldsPattern = Pattern.compile("^((?![0-9\\~\\!\\@\\#\\$\\%\\^\\&\\*\\(\\)\\_\\+\\=\\-\\[\\]\\{\\}\\;\\:\\\"\\\\\\/\\<\\>\\?]).)+$");
@@ -28,6 +28,8 @@ public class NameListEdit extends HttpServlet {
         // email from : https://stackoverflow.com/questions/8204680/java-regex-email
         //my JS regex didnt work here
         phoneFieldsPattern = Pattern.compile("[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]");
+        phoneFieldsPattern2 = Pattern.compile("[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]");
+
         birthdayFieldsPattern = Pattern.compile("[1-9][0-9][0-9][0-9]\\-[0-1][0-9]\\-[0-3][0-9]");
 
     }
@@ -81,8 +83,14 @@ public class NameListEdit extends HttpServlet {
             System.out.println("Phone Number - Good.");
             dataValidation[2] = 1;
         }else{
+            m = phoneFieldsPattern2.matcher(fromJson.getPhone());
+            if(m.find()){
+                System.out.println("Phone Number - Good.");
+                dataValidation[2] = 1;
+            }else{
             System.out.println("Phone Number - Bad");
             dataValidation[2] = 0;
+            }
         }
 
         m = emailFieldsPattern.matcher(fromJson.getEmail());
@@ -106,7 +114,14 @@ public class NameListEdit extends HttpServlet {
         int total = 0;
         for (int i = 0; i < dataValidation.length; i++){total += dataValidation[i];}
         if (total == 5) {
-            PersonDAO.insertPerson(fromJson);
+
+            if(fromJson.getId() == 0) {
+                PersonDAO.insertPerson(fromJson);
+            }else{
+                PersonDAO.updatePerson(fromJson);
+            }
+
+
         }else{
             System.out.println("One or more of the fields was bad");
         }
